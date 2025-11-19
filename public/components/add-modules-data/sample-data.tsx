@@ -1,0 +1,388 @@
+/*
+ * Wazuh app - React component for add sample data
+ * Copyright (C) 2015-2022 Wazuh, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Find more information about this on the LICENSE file.
+ */
+
+import React, { Component } from 'react';
+import { WzButtonPermissions } from '../../components/common/permissions/button';
+
+import {
+  EuiFlexItem,
+  EuiCard,
+  EuiFlexGrid,
+  EuiFlexGroup,
+  EuiCallOut,
+  EuiSpacer,
+} from '@elastic/eui';
+
+import { getToasts } from '../../kibana-services';
+import { WzRequest } from '../../react-services/wz-request';
+import { AppState } from '../../react-services/app-state';
+import { UI_ERROR_SEVERITIES } from '../../react-services/error-orchestrator/types';
+import { UI_LOGGER_LEVELS } from '../../../common/constants';
+import { getErrorOrchestrator } from '../../react-services/common-services';
+import { i18n } from '@osd/i18n';
+import {
+  amazonWebServices,
+  docker,
+  fileIntegrityMonitoring,
+  github,
+  googleCloud,
+  malwareDetection,
+  mitreAttack,
+  office365,
+  vulnerabilityDetection,
+} from '../../utils/applications';
+
+const sampleSecurityInformationApplication = [
+  fileIntegrityMonitoring.title,
+  amazonWebServices.title,
+  office365.title,
+  googleCloud.title,
+  github.title,
+  'authorization',
+  'ssh',
+  'web',
+].join(', ');
+
+const sampleThreatDetectionApplication = [
+  vulnerabilityDetection.title,
+  docker.title,
+  mitreAttack.title,
+].join(', ');
+
+const sampleMalwareDetection = ['malware', 'VirusTotal', 'YARA'].join(', ');
+
+export default class WzSampleData extends Component {
+  categories: {
+    title: string;
+    description: string;
+    image: string;
+    categorySampleAlertsIndex: string;
+  }[];
+  generateAlertsParams: any;
+  state: {
+    [name: string]: {
+      exists: boolean;
+      addDataLoading: boolean;
+      removeDataLoading: boolean;
+    };
+  };
+  constructor(props) {
+    super(props);
+    this.generateAlertsParams = {}; // extra params to add to generateAlerts function in server
+    this.categories = [
+      {
+        title: i18n.translate('wz-sample-data.security-info.title', {
+          defaultMessage: 'Sample security information',
+        }),
+        description: i18n.translate('wz-sample-data.security-info.description', {
+          defaultMessage: 'Sample data, visualizations and dashboards for ' +
+            'security information ({applications}).',
+          values: { applications: sampleSecurityInformationApplication }
+        }),
+        image: '',
+        categorySampleAlertsIndex: 'security',
+      },
+      {
+title: i18n.translate('wz-sample-data.malware-detection.title', {
+          defaultMessage: 'Sample {malwareTitle}',
+          values: { malwareTitle: malwareDetection.title }
+        }),
+        description: i18n.translate('wz-sample-data.malware-detection.description', {
+          defaultMessage: 'Sample data, visualizations and dashboards for events of' +
+            ' {malwareTitle} ({sampleData}).',
+          values: { malwareTitle: malwareDetection.title, sampleData: sampleMalwareDetection }
+        }),
+        image: '',
+        categorySampleAlertsIndex: 'auditing-policy-monitoring',
+      },
+      {
+        title: i18n.translate('wz-sample-data.threat-detection.title', {
+          defaultMessage: 'Sample threat detection and response'
+        }),
+        description: i18n.translate('wz-sample-data.threat-detection.description', {
+          defaultMessage: 'Sample data, visualizations and dashboards for threat events ' +
+            'of detection and response ({applications}).',
+          values: { applications: sampleThreatDetectionApplication }
+        }),
+        image: '',
+        categorySampleAlertsIndex: 'threat-detection',
+      },
+    ];
+    this.state = {};
+    this.categories.forEach(category => {
+      this.state[category.categorySampleAlertsIndex] = {
+        exists: false,
+        addDataLoading: false,
+        removeDataLoading: false,
+        havePermissions: false,
+      };
+    });
+  }
+  async componentDidMount() {
+    try {
+      // Check if sample data for each category was added
+      try {
+        const results = await PromiseAllRecursiveObject(
+          this.categories.reduce((accum, cur) => {
+            accum[cur.categorySampleAlertsIndex] = WzRequest.genericReq(
+              'GET',
+              `/elastic/samplealerts/${cur.categorySampleAlertsIndex}`,
+            );
+            return accum;
+          }, {}),
+        );
+
+        this.setState(
+          Object.keys(results).reduce(
+            (accum, cur) => {
+              accum[cur] = {
+                ...this.state[cur],
+                exists: results[cur].data.exists,
+              };
+              return accum;
+            },
+            { ...this.state },
+          ),
+        );
+      } catch (error) {
+        throw error;
+      }
+
+      // Get information about cluster/manager
+      try {
+        const clusterName = AppState.getClusterInfo().cluster;
+        const managerName = AppState.getClusterInfo().manager;
+        this.generateAlertsParams.manager = {
+          name: managerName,
+        };
+        if (clusterName && clusterName !== 'Disabled') {
+          this.generateAlertsParams.cluster = {
+            name: clusterName,
+            node: clusterName,
+          };
+        }
+      } catch (error) {
+        throw error;
+      }
+    } catch (error) {
+      const options = {
+        context: `${WzSampleData.name}.componentDidMount`,
+        level: UI_LOGGER_LEVELS.ERROR,
+        severity: UI_ERROR_SEVERITIES.BUSINESS,
+        error: {
+          error: error,
+          message: error.message || error,
+          title: i18n.translate('wz-sample-data.error-check', {
+            defaultMessage: 'Error checking sample data'
+          }),
+        },
+      };
+      getErrorOrchestrator().handleError(options);
+    }
+  }
+  showToast(
+    color: string,
+    title: string = '',
+    text: string = '',
+    time: number = 3000,
+  ) {
+    getToasts().add({
+      color: color,
+      title: title,
+      text: text,
+      toastLifeTimeMs: time,
+    });
+  }
+  async addSampleData(category) {
+    try {
+      this.setState({
+        [category.categorySampleAlertsIndex]: {
+          ...this.state[category.categorySampleAlertsIndex],
+          addDataLoading: true,
+        },
+      });
+      await WzRequest.genericReq(
+        'POST',
+        `/elastic/samplealerts/${category.categorySampleAlertsIndex}`,
+        { params: this.generateAlertsParams },
+      );
+      this.showToast(
+        'success',
+        i18n.translate('wz-sample-data.alerts-added', {
+          defaultMessage: '{title} alerts added',
+          values: { title: category.title }
+        }),
+        i18n.translate('wz-sample-data.date-range', {
+          defaultMessage: 'Date range for sample data is now-7 days ago'
+        }),
+        5000,
+      );
+      this.setState({
+        [category.categorySampleAlertsIndex]: {
+          ...this.state[category.categorySampleAlertsIndex],
+          exists: true,
+          addDataLoading: false,
+        },
+      });
+    } catch (error) {
+      const options = {
+        context: `${WzSampleData.name}.addSampleData`,
+        level: UI_LOGGER_LEVELS.ERROR,
+        severity: UI_ERROR_SEVERITIES.BUSINESS,
+        error: {
+          error: error,
+          message: error.message || error,
+          title: i18n.translate('wz-sample-data.error-add', {
+            defaultMessage: 'Error trying to add sample data'
+          }),
+        },
+      };
+      getErrorOrchestrator().handleError(options);
+      this.setState({
+        [category.categorySampleAlertsIndex]: {
+          ...this.state[category.categorySampleAlertsIndex],
+          addDataLoading: false,
+        },
+      });
+    }
+  }
+  async removeSampleData(category) {
+    try {
+      this.setState({
+        [category.categorySampleAlertsIndex]: {
+          ...this.state[category.categorySampleAlertsIndex],
+          removeDataLoading: true,
+        },
+      });
+      await WzRequest.genericReq(
+        'DELETE',
+        `/elastic/samplealerts/${category.categorySampleAlertsIndex}`,
+      );
+      this.setState({
+        [category.categorySampleAlertsIndex]: {
+          ...this.state[category.categorySampleAlertsIndex],
+          exists: false,
+          removeDataLoading: false,
+        },
+      });
+      this.showToast('success', i18n.translate('wz-sample-data.alerts-removed', {
+        defaultMessage: '{title} alerts removed',
+        values: { title: category.title }
+      }));
+    } catch (error) {
+      const options = {
+        context: `${WzSampleData.name}.removeSampleData`,
+        level: UI_LOGGER_LEVELS.ERROR,
+        severity: UI_ERROR_SEVERITIES.BUSINESS,
+        error: {
+          error: error,
+          message: error.message || error,
+          title: i18n.translate('wz-sample-data.error-delete', {
+            defaultMessage: 'Error trying to delete sample data'
+          }),
+        },
+      };
+      getErrorOrchestrator().handleError(options);
+      this.setState({
+        [category.categorySampleAlertsIndex]: {
+          ...this.state[category.categorySampleAlertsIndex],
+          removeDataLoading: false,
+        },
+      });
+    }
+  }
+  renderCard(category) {
+    const { addDataLoading, exists, removeDataLoading } =
+      this.state[category.categorySampleAlertsIndex];
+    return (
+      <EuiFlexItem key={`sample-data-${category.title}`}>
+        <EuiCard
+          textAlign='left'
+          title={category.title}
+          description={category.description}
+          image={category.image}
+          betaBadgeLabel={exists ? i18n.translate('wz-sample-data.installed', {
+            defaultMessage: 'Installed'
+          }) : undefined}
+          footer={
+            <EuiFlexGroup justifyContent='flexEnd'>
+              <EuiFlexItem grow={false}>
+                {(exists && (
+                  <WzButtonPermissions
+                    color='danger'
+                    administrator
+                    onClick={() => this.removeSampleData(category)}
+                  >
+                    {(removeDataLoading && i18n.translate('wz-sample-data.removing-data', {
+                      defaultMessage: 'Removing data'
+                    })) || i18n.translate('wz-sample-data.remove-data', {
+                      defaultMessage: 'Remove data'
+                    })}
+                  </WzButtonPermissions>
+                )) || (
+                  <WzButtonPermissions
+                    isLoading={addDataLoading}
+                    administrator
+                    onClick={() => this.addSampleData(category)}
+                  >
+                    {(addDataLoading && i18n.translate('wz-sample-data.adding-data', {
+                      defaultMessage: 'Adding data'
+                    })) || i18n.translate('wz-sample-data.add-data', {
+                      defaultMessage: 'Add data'
+                    })}
+                  </WzButtonPermissions>
+                )}
+              </EuiFlexItem>
+            </EuiFlexGroup>
+          }
+        />
+      </EuiFlexItem>
+    );
+  }
+  render() {
+    return (
+      <>
+        <EuiCallOut
+          title={i18n.translate('wz-sample-data.callout', {
+            defaultMessage: 'These actions require permissions on the managed indices.'
+          })}
+          iconType='iInCircle'
+        />
+        <EuiSpacer />
+        <EuiFlexGrid columns={3}>
+          {this.categories.map(category => this.renderCard(category))}
+        </EuiFlexGrid>
+      </>
+    );
+  }
+}
+
+const zipObject = (keys = [], values = []) => {
+  return keys.reduce((accumulator, key, index) => {
+    accumulator[key] = values[index];
+    return accumulator;
+  }, {});
+};
+
+const PromiseAllRecursiveObject = function (obj) {
+  const keys = Object.keys(obj);
+  return Promise.all(
+    keys.map(key => {
+      const value = obj[key];
+      // Promise.resolve(value) !== value should work, but !value.then always works
+      if (typeof value === 'object' && !value.then) {
+        return PromiseAllRecursiveObject(value);
+      }
+      return value;
+    }),
+  ).then(result => zipObject(keys, result));
+};
