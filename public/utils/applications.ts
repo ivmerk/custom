@@ -560,7 +560,7 @@ const customPlugin = {
   order: 701,
   showInOverviewApp: false,
   showInAgentMenu: false,
-  redirectTo: () => '/manager/?tab=decoders',
+  redirectTo: () => '/overview?tab=custom&tabView=dashboard',
 };
 export const cdbLists = {
   category: 'wz-category-server-management',

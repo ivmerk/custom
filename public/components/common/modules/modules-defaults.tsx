@@ -57,6 +57,7 @@ import {
   DashboardGoogleCloud,
   DashboardVuls,
   InventoryVuls,
+  DashboardCustom,
 } from '../../overview';
 import {
   DockerDataSource,
@@ -436,6 +437,28 @@ export const ModulesDefaults = {
         component: props => (
           <ComplianceTable {...props} DataSource={TSCDataSource} />
         ),
+      },
+      renderDiscoverTab({
+        tableColumns: tscColumns,
+        DataSource: TSCDataSource,
+      }),
+    ],
+    availableFor: ['manager', 'agent'],
+  },
+  custom: {
+    init: 'dashboard',
+    tabs: [
+      {
+        id: 'dashboard',
+        name: 'Dashboard',
+        buttons: [ButtonExploreAgent, ButtonModuleGenerateReport],
+        component: DashboardCustom,
+      },
+      {
+        id: 'settings',
+        name: 'Settings',
+        buttons: [ButtonExploreAgent],
+        component: () => <div>Settings</div>,
       },
       renderDiscoverTab({
         tableColumns: tscColumns,
