@@ -82,7 +82,7 @@ export class WazuhPlugin implements Plugin<WazuhPluginSetup, WazuhPluginStart> {
 
     const serverInfo = core.http.getServerInfo();
 
-    core.http.registerRouteHandlerContext('wazuh', (context, request) => {
+    core.http.registerRouteHandlerContext('wazuh-custom', (context, request) => {
       return {
         // Create a custom logger with a tag composed of HTTP method and path endpoint
         logger: this.logger.get(

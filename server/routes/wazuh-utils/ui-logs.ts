@@ -15,19 +15,4 @@ import { schema } from '@osd/config-schema';
 
 export const UiLogsRoutes = (router: IRouter) => {
   const ctrl = new UiLogsCtrl();
-
-  router.post(
-    {
-      path: '/utils/logs/ui',
-      validate: {
-        body: schema.object({
-          message: schema.string(),
-          level: schema.string(),
-          location: schema.string(),
-        }),
-      },
-    },
-    async (context, request, response) =>
-      await ctrl.createUiLogs(context, request, response),
-  );
 };

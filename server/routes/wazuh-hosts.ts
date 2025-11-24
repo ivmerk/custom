@@ -15,13 +15,4 @@ import { IRouter } from 'opensearch_dashboards/server';
 export function WazuhHostsRoutes(router: IRouter, services) {
   const ctrl = new WazuhHostsCtrl();
 
-  // Get Wazuh-API entries list (Multimanager) from elasticsearch index
-  router.get(
-    {
-      path: '/hosts/apis',
-      validate: false,
-    },
-    async (context, request, response) =>
-      ctrl.getHostsEntries(context, request, response),
-  );
 }

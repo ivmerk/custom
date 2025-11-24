@@ -551,7 +551,7 @@ export const decoders = {
 };
 
 const customPlugin = {
-  category: 'wz-category-server-management',
+  category: 'wz-category-custom',
   id: 'custom-plugin',
   title: 'Custom plugin',
   breadcrumbLabel: 'Custom plugin',
@@ -885,6 +885,14 @@ export const Categories = [
       defaultMessage: 'Home',
     }),
     order: 0,
+    euiIconType: 'appSearchApp',
+  },
+  {
+    id: 'wz-category-custom',
+    label: i18n.translate('wz-app-category-custom', {
+      defaultMessage: 'Custom',
+    }),
+    order: 100,
     euiIconType: 'appSearchApp',
   },
   {
