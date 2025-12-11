@@ -454,12 +454,6 @@ export const ModulesDefaults = {
         buttons: [ButtonExploreAgent, ButtonModuleGenerateReport],
         component: DashboardCustom,
       },
-      {
-        id: 'settings',
-        name: 'Settings',
-        buttons: [ButtonExploreAgent],
-        component: () => <div>Settings</div>,
-      },
       renderDiscoverTab({
         tableColumns: tscColumns,
         DataSource: TSCDataSource,

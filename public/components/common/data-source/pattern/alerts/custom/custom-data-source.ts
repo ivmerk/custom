@@ -1,7 +1,7 @@
 import {AlertsDataSource} from '../alerts-data-source';
 import { tFilter } from '../../../types';
 
-const GROUP_KEY = 'rule.groups.dlp';
+const GROUP_KEY = 'rule.groups';
 const DATA_SOURCE_FILTER_CONTROLLED_CUSTOM_RULE = 'custom.rules';
 export class CustomDataSource extends AlertsDataSource{
   constructor(id: string, title: string) {
@@ -16,24 +16,23 @@ export class CustomDataSource extends AlertsDataSource{
           negate: false,
           disabled: false,
           alias: null,
-          type: 'exists',
+          type: 'phrase',
           key: GROUP_KEY,
-          value: 'exists',
-          params: {
-            query: null,
-            type: 'phrase',
-          },
+          value: 'dlp',
           controlledBy: DATA_SOURCE_FILTER_CONTROLLED_CUSTOM_RULE,
         },
-        exists: {
-          field: GROUP_KEY,
+        query: {
+          match_phrase: {
+            'rule.groups.keyword': 'dlp'
+          }
         },
         $state: {
-          store: 'appState',
-        },
-      } as tFilter,
+          store: 'appState'
+        }
+      }
     ];
   }
+
   getFixedFilters(): tFilter[] {
     return [
       ...super.getFixedFiltersClusterManager(),

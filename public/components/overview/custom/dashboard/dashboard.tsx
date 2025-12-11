@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getPlugins } from '../../../../kibana-services';
 import { I18nProvider } from '@osd/i18n/react';
 import { ViewMode } from '../../../../../../../src/plugins/embeddable/public';
@@ -14,6 +14,11 @@ import {
   tParsedIndexPattern,
   useDataSource
 } from '../../../common/data-source';
+import {
+  ErrorFactory,
+  ErrorHandler,
+  HttpError,
+} from '../../../../react-services/error-management';
 import { WzSearchBar } from '../../../common/search-bar';
 import useSearchBar from '../../../common/search-bar/use-search-bar';
 import { SampleDataWarning } from '../../../visualize/components';
@@ -30,7 +35,9 @@ const DashboardC: React.FC = () => {
     setFilters,
     fetchFilters,
     fixedFilters,
-    dataSource
+    isLoading: isDataSourceLoading,
+    dataSource,
+    fetchData
   } = useDataSource<tParsedIndexPattern, PatternDataSource>({
     DataSource: CustomDataSource, repository: AlertsRepository
   });
@@ -44,6 +51,37 @@ const DashboardC: React.FC = () => {
   });
   const { query, dateRangeFrom, dateRangeTo } = searchBarProps;
 
+  useEffect(() => {
+    if (isDataSourceLoading) {
+      return;
+    }
+    console.log('query =', query);
+    console.log('dateRangeFrom =', dateRangeFrom);
+    console.log('dateRangeTo =', dateRangeTo);
+    fetchData({
+      query,
+      dateRange: { from: dateRangeFrom, to: dateRangeTo },
+    })
+      .then(results => {
+        setResults(results);
+        console.log('results = ', results);
+      })
+      .catch(error => {
+        const searchError = ErrorFactory.create(HttpError, {
+          error,
+          message: 'Error fetching data',
+        });
+        ErrorHandler.handleError(searchError);
+      });
+  }, [
+    JSON.stringify(fetchFilters),
+    JSON.stringify(query),
+    dateRangeFrom,
+    dateRangeTo,
+    fingerprint,
+    autoRefreshFingerprint,
+  ]);
+
   return (
     <I18nProvider>
       <>
@@ -56,11 +94,7 @@ const DashboardC: React.FC = () => {
           showSaveQuery={true}
         />
         { dataSource ? <DiscoverNoResults /> : null }
-        <div
-          className={`custom-dashboard-responsive ${
-            dataSource && results?.hits?.total > 0 ? '' : 'wz-no-display'
-          }`}
-        >
+        <div className="custom-dashboard-responsive" >
           <SampleDataWarning />
           <div className='custom-dashboard-filters-wrapper'>
             <DashboardByRenderer
