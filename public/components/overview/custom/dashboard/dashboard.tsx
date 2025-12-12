@@ -41,7 +41,6 @@ const DashboardC: React.FC = () => {
   } = useDataSource<tParsedIndexPattern, PatternDataSource>({
     DataSource: CustomDataSource, repository: AlertsRepository
   });
-  console.log("dataSource = ", dataSource, "filters = ", filters);
   const [results, setResults] = useState<SearchResponse>({} as SearchResponse);
 
   const { searchBarProps, fingerprint, autoRefreshFingerprint } = useSearchBar({
@@ -55,16 +54,12 @@ const DashboardC: React.FC = () => {
     if (isDataSourceLoading) {
       return;
     }
-    console.log('query =', query);
-    console.log('dateRangeFrom =', dateRangeFrom);
-    console.log('dateRangeTo =', dateRangeTo);
     fetchData({
       query,
       dateRange: { from: dateRangeFrom, to: dateRangeTo },
     })
       .then(results => {
         setResults(results);
-        console.log('results = ', results);
       })
       .catch(error => {
         const searchError = ErrorFactory.create(HttpError, {
@@ -93,7 +88,9 @@ const DashboardC: React.FC = () => {
           showQueryBar={true}
           showSaveQuery={true}
         />
-        { dataSource ? <DiscoverNoResults /> : null }
+        {dataSource && results?.hits?.total === 0 ? (
+          <DiscoverNoResults />
+        ) : null}
         <div className="custom-dashboard-responsive" >
           <SampleDataWarning />
           <div className='custom-dashboard-filters-wrapper'>
