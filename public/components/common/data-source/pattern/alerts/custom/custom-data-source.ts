@@ -22,8 +22,11 @@ export class CustomDataSource extends AlertsDataSource{
           controlledBy: DATA_SOURCE_FILTER_CONTROLLED_CUSTOM_RULE,
         },
         query: {
-          match_phrase: {
-            'rule.groups.keyword': 'dlp'
+          bool: {
+            filter: [
+              { term: { 'rule.groups': 'dlp' } },
+              { exists: { 'field': 'rule.mitre.id' } }
+            ]
           }
         },
         $state: {
