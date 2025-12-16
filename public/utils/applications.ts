@@ -137,8 +137,7 @@ export const fileIntegrityMonitoring = {
 };
 
 export const threatHunting = {
-   category: 'wz-category-threat-intelligence',
-
+  category: 'wz-category-threat-intelligence',
   id: 'threat-hunting',
   title: i18n.translate('wz-app-threat-hunting-title', {
     defaultMessage: 'Threat Hunting Test',
@@ -550,10 +549,10 @@ export const decoders = {
   redirectTo: () => '/manager/?tab=decoders',
 };
 
-const customPlugin = {
-  category: 'wz-category-custom',
+export const customPlugin = {
+  category: 'integrations',
   id: 'custom-plugin',
-  title: 'Custom plugin',
+  title: 'Scopd',
   breadcrumbLabel: 'Custom plugin',
   description: 'Custom discription',
   euiIconType: 'indexRollupApp',
@@ -879,6 +878,12 @@ export const Applications = [
 
 // Categories
 export const Categories = [
+  {
+    id: 'integrations',
+    order: 50,
+    label: 'Integrations',
+    euiIconType: 'visLine',
+  },
   {
     id: 'wz-category-home',
     label: i18n.translate('wz-app-category-home', {

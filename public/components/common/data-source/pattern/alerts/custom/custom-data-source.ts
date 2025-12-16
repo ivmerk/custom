@@ -18,21 +18,29 @@ export class CustomDataSource extends AlertsDataSource{
           alias: null,
           type: 'phrase',
           key: GROUP_KEY,
-          value: 'dlp',
+          value: 'scopd AND (dlp OR phishing)',
           controlledBy: DATA_SOURCE_FILTER_CONTROLLED_CUSTOM_RULE,
         },
         query: {
           bool: {
             filter: [
-              { term: { 'rule.groups': 'dlp' } },
-              { exists: { 'field': 'rule.mitre.id' } }
-            ]
-          }
+              {
+                term: {
+                  'rule.groups': 'scopd',
+                },
+              },
+              {
+                exists: {
+                  field: 'rule.mitre.id',
+                },
+              },
+            ],
+          },
         },
         $state: {
-          store: 'appState'
-        }
-      }
+          store: 'appState',
+        },
+      },
     ];
   }
 

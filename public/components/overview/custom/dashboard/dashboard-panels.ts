@@ -129,8 +129,8 @@ const getVisStateAlertsEvolution = (indexPatternId: string) => {
           type: 'terms',
           schema: 'group',
           params: {
-            field: 'rule.mitre.technique',
-            customLabel: 'Attack ID',
+            field: 'rule.groups',
+            customLabel: 'Scopd rule ID',
             orderBy: '1',
             order: 'desc',
             size: 5,
@@ -152,7 +152,10 @@ const getVisStateAlertsEvolution = (indexPatternId: string) => {
             interval: 'auto',
             drop_partials: false,
             min_doc_count: 1,
-            extended_bounds: {},
+            extended_bounds: {
+              min: 'now-7d',
+              max: 'now'
+            },
           },
         },
       ],
