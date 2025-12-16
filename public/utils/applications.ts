@@ -881,7 +881,11 @@ export const Categories = [
   {
     id: 'integrations',
     order: 50,
-    label: 'Integrations',
+    get label() {
+      return i18n.translate('core.ui.integrationsNavList.label', {
+        defaultMessage: 'Integrations',
+      });
+    },
     euiIconType: 'visLine',
   },
   {
