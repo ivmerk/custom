@@ -53,7 +53,7 @@ jobs:
               name: 'Custom',
               path: 'custom/plugins/main',
               container_path: 'custom',
-            }
+            },
         ]
     steps:
       - name: Step 01 - Download the plugin's source code
