@@ -48,13 +48,9 @@ jobs:
     strategy:
       matrix:
         plugins:
-        [
-            {
-              name: 'Custom',
-              path: 'custom/plugins/main',
-              container_path: 'custom',
-            },
-        ]
+          - name: 'Custom'
+            path: 'custom/plugins/main'
+            container_path: 'custom'
     steps:
       - name: Step 01 - Download the plugin's source code
         uses: actions/checkout@v4
