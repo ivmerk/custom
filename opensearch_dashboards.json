@@ -1,5 +1,6 @@
 {
-  "id": "wazuh-custom",
+  "name": "wazuhCustom",
+  "id": "wazuhCustom",
   "version": "4.12.0-03",
   "opensearchDashboardsVersion": "opensearchDashboards",
   "configPath": [
