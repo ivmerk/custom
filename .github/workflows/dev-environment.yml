@@ -68,7 +68,7 @@ jobs:
         run: |
           # Detect which platform to use from source code
           platform=kbn
-          PLUGIN_PATH="wazuh/${{ matrix.plugins.path }}"
+          PLUGIN_PATH="wazuh"
 
           echo "Detecting platform [kbn, osd]..."
           if [ -f "$PLUGIN_PATH/opensearch_dashboards.json" ]; then
