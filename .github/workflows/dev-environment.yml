@@ -100,10 +100,10 @@ jobs:
           "
       - name: Get the plugin version and format reference name
         run: |
-          echo "githubReference=$(echo  | sed 's/\//-/g')" >> $GITHUB_ENV
-          echo "version=$(jq -r '.version' $(pwd)/wazuh/plugins/main/package.json)" >> $GITHUB_ENV
-          echo "revision=$(jq -r '.revision' $(pwd)/wazuh/plugins/main/package.json)" >> $GITHUB_ENV
-
+          echo "githubReference=$(echo '${{ inputs.reference }}' | sed 's/\//-/g')" >> $GITHUB_ENV
+          echo "version=$(jq -r '.version' $(pwd)/wazuh/package.json)" >> $GITHUB_ENV
+          echo "revision=$(jq -r '.revision' $(pwd)/wazuh/package.json)" >> $GITHUB_ENV
+      
       - name: Step 04 - Upload artifact to GitHub
         if: ${{ inputs.artifact_name && inputs.artifact_path }}
         uses: actions/upload-artifact@v4
