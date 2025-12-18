@@ -78,11 +78,12 @@ jobs:
 
           # Read the platform version from the package.json file
           echo "Reading the platform version from the package.json..."
-          platform_version=$(jq -r '
+            platform_version=$(jq -r "$(cat <<'EOF'
             .pluginPlatform.version,
             .kibana.version
             | select(. != null)
-        ' "$PLUGIN_PATH/package.json")
+            EOF
+            )" "$PLUGIN_PATH/package.json")
 
 echo "Plugin platform version: $platform_version"
 
