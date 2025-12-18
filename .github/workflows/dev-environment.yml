@@ -85,24 +85,24 @@ jobs:
             EOF
             )" "$PLUGIN_PATH/package.json")
 
-echo "Plugin platform version: $platform_version"
+            echo "Plugin platform version: $platform_version"
 
-# Set the environment variable to the correct platform
-if [ "$platform" = "kbn" ]; then
-  docker_env_plugin_platform="KIBANA_VERSION"
-else
-  docker_env_plugin_platform="OPENSEARCH_DASHBOARDS_VERSION"
-fi
+            # Set the environment variable to the correct platform
+            if [ "$platform" = "kbn" ]; then
+              docker_env_plugin_platform="KIBANA_VERSION"
+            else
+              docker_env_plugin_platform="OPENSEARCH_DASHBOARDS_VERSION"
+            fi
 
-# Up the environment and run the command
-docker run -t --rm \
-  -e ${docker_env_plugin_platform}=${platform_version} \
-  -v "$(pwd)/$PLUGIN_PATH:/home/node/kbn/plugins/${{ matrix.plugins.container_path }}" \
-  quay.io/wazuh/${platform}-dev:${platform_version} \
-  bash -c "
-    yarn config set registry https://registry.yarnpkg.com;
-    cd /home/node/kbn/plugins/${{ matrix.plugins.container_path }} && yarn && yarn build;
-  "
+            # Up the environment and run the command
+            docker run -t --rm \
+            -e ${docker_env_plugin_platform}=${platform_version} \
+            -v "$(pwd)/$PLUGIN_PATH:/home/node/kbn/plugins/${{ matrix.plugins.container_path }}" \
+            quay.io/wazuh/${platform}-dev:${platform_version} \
+            bash -c "
+            yarn config set registry https://registry.yarnpkg.com;
+            cd /home/node/kbn/plugins/${{ matrix.plugins.container_path }} && yarn && yarn build;
+            "
       - name: Get the plugin version and format reference name
         run: |
           echo "githubReference=$(echo ${{ inputs.reference }} | sed 's/\//-/g')" >> $GITHUB_ENV
