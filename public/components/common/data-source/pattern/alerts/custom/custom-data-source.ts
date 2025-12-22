@@ -18,7 +18,7 @@ export class CustomDataSource extends AlertsDataSource{
           alias: null,
           type: 'phrase',
           key: GROUP_KEY,
-          value: 'scopd AND (dlp OR phishing)',
+          value: 'scopd',
           controlledBy: DATA_SOURCE_FILTER_CONTROLLED_CUSTOM_RULE,
         },
         query: {
