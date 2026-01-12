@@ -129,7 +129,7 @@ const getVisStateAlertsEvolution = (indexPatternId: string) => {
           type: 'terms',
           schema: 'group',
           params: {
-            field: 'rule.groups',
+            field: 'rule.groups.keyword',
             customLabel: 'Scopd rule ID',
             orderBy: '1',
             order: 'desc',
