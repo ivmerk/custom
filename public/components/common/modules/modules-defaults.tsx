@@ -76,8 +76,10 @@ import {
   PCIDSSDataSource,
   Office365DataSource,
   ThreatHuntingDataSource,
+  CustomDataSource,
 } from '../data-source';
 import { ButtonExploreAgent } from '../../wz-agent-selector/button-explore-agent';
+import { customColumns } from '../../overview/custom/events/custom-columns';
 
 const renderDiscoverTab = (props: WazuhDiscoverProps) => {
   return {
@@ -455,8 +457,8 @@ export const ModulesDefaults = {
         component: DashboardCustom,
       },
       renderDiscoverTab({
-        tableColumns: tscColumns,
-        DataSource: TSCDataSource,
+        tableColumns: customColumns,
+        DataSource: CustomDataSource,
       }),
     ],
     availableFor: ['manager', 'agent'],
