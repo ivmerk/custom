@@ -29,11 +29,6 @@ export class CustomDataSource extends AlertsDataSource{
                   'rule.groups': 'scopd',
                 },
               },
-              {
-                exists: {
-                  field: 'rule.mitre.id',
-                },
-              },
             ],
           },
         },
