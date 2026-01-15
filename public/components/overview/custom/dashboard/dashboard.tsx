@@ -60,6 +60,7 @@ const DashboardC: React.FC = () => {
     })
       .then(results => {
         setResults(results);
+        console.log(results);
       })
       .catch(error => {
         const searchError = ErrorFactory.create(HttpError, {
@@ -88,7 +89,7 @@ const DashboardC: React.FC = () => {
           showQueryBar={true}
           showSaveQuery={true}
         />
-        {dataSource && results?.hits?.total === 0 ? (
+        { isDataSourceLoading || (dataSource && results?.hits?.total === 0) ? (
           <DiscoverNoResults />
         ) : null}
         <div className="custom-dashboard-responsive" >
