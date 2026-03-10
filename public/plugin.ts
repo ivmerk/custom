@@ -1,11 +1,11 @@
 import {
   AppMountParameters,
-  AppNavLinkStatus,
   CoreSetup,
   CoreStart,
   Plugin,
   PluginInitializerContext,
 } from 'opensearch_dashboards/public';
+import { AppNavLinkStatus } from '../../../src/core/public';
 import {
   setDataPlugin,
   setHttp,

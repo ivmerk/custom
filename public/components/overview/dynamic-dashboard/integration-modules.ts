@@ -40,6 +40,7 @@ export const integrationModules: IntegrationModule[] = [
     ruleGroup: 'cisco_ftd',
     euiIconType: 'securityAnalyticsApp',
     order: 53,
+    hidden: true,
   },
   {
     id: 'cisco-asa',
@@ -47,6 +48,7 @@ export const integrationModules: IntegrationModule[] = [
     ruleGroup: 'cisco_asa',
     euiIconType: 'securityAnalyticsApp',
     order: 54,
+    hidden: true,
   },
   {
     id: 'junos',
@@ -54,6 +56,7 @@ export const integrationModules: IntegrationModule[] = [
     ruleGroup: 'junos',
     euiIconType: 'securityAnalyticsApp',
     order: 55,
+    hidden: true,
   },
   {
     id: 'paloalto',
@@ -61,6 +64,7 @@ export const integrationModules: IntegrationModule[] = [
     ruleGroup: 'paloalto',
     euiIconType: 'securityAnalyticsApp',
     order: 56,
+    hidden: true,
   },
   {
     id: 'fortigate',
@@ -68,5 +72,6 @@ export const integrationModules: IntegrationModule[] = [
     ruleGroup: 'fortigate',
     euiIconType: 'securityAnalyticsApp',
     order: 57,
+    hidden: true,
   },
 ];
