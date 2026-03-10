@@ -14,3 +14,4 @@ export { DashboardThreatHunting } from './threat-hunting/dashboard';
 export { DashboardTSC } from './tsc/dashboards';
 export { DashboardVuls, InventoryVuls } from './vulnerabilities';
 export { DashboardCustom } from './custom/dashboard';
+export { DynamicDashboard, integrationModules } from './dynamic-dashboard';

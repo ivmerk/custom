@@ -6,6 +6,7 @@ import {
   LogoGoogleCloud,
   LogoOffice365,
 } from '../components/common/logos';
+import { integrationModules } from '../components/overview/dynamic-dashboard/integration-modules';
 
 /* Applications
 Convention: the order of each application must according to the order of the category
@@ -554,13 +555,27 @@ export const customPlugin = {
   id: 'custom-plugin',
   title: 'Scopd',
   breadcrumbLabel: 'Custom plugin',
-  description: 'Custom discription',
+  description: 'Custom description',
   euiIconType: 'indexRollupApp',
   order: 701,
   showInOverviewApp: false,
   showInAgentMenu: false,
   redirectTo: () => '/overview?tab=custom&tabView=dashboard',
 };
+
+// Dynamic integration modules — generated from integrationModules config
+export const dynamicIntegrationApps = integrationModules.map((mod) => ({
+  category: 'integrations',
+  id: `integration-${mod.id}`,
+  title: mod.title,
+  breadcrumbLabel: mod.title,
+  description: `${mod.title} integration dashboard`,
+  euiIconType: mod.euiIconType,
+  order: mod.order,
+  showInOverviewApp: false,
+  showInAgentMenu: false,
+  redirectTo: () => `/overview?tab=dynamic&tabView=dashboard&ruleGroup=${mod.ruleGroup}`,
+}));
 export const cdbLists = {
   category: 'wz-category-server-management',
   id: 'cdb-lists',
@@ -836,7 +851,8 @@ export const Applications = [
   //threatHunting,
   //vulnerabilityDetection,
   //mitreAttack,
-  customPlugin,
+  //customPlugin,
+  ...dynamicIntegrationApps,
   //pciDss,
   //hipaa,
   //gdpr,

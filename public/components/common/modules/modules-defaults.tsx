@@ -77,9 +77,12 @@ import {
   Office365DataSource,
   ThreatHuntingDataSource,
   CustomDataSource,
+  createRuleGroupDataSource,
 } from '../data-source';
 import { ButtonExploreAgent } from '../../wz-agent-selector/button-explore-agent';
 import { customColumns } from '../../overview/custom/events/custom-columns';
+import { DynamicDashboard } from '../../overview/dynamic-dashboard';
+import { useRouterSearch } from '../hooks';
 
 const renderDiscoverTab = (props: WazuhDiscoverProps) => {
   return {
@@ -460,6 +463,39 @@ export const ModulesDefaults = {
         tableColumns: customColumns,
         DataSource: CustomDataSource,
       }),
+    ],
+    availableFor: ['manager', 'agent'],
+  },
+  dynamic: {
+    init: 'dashboard',
+    tabs: [
+      {
+        id: 'dashboard',
+        name: 'Dashboard',
+        buttons: [ButtonExploreAgent, ButtonModuleGenerateReport],
+        component: () => {
+          const { ruleGroup = 'scopd' } = useRouterSearch();
+          return <DynamicDashboard ruleGroup={ruleGroup as string} />;
+        },
+      },
+      {
+        id: 'events',
+        name: 'Events',
+        buttons: [ButtonExploreAgent],
+        component: () => {
+          const { ruleGroup = 'scopd' } = useRouterSearch();
+          const DataSource = React.useMemo(
+            () => createRuleGroupDataSource(ruleGroup as string),
+            [ruleGroup],
+          );
+          return (
+            <WazuhDiscover
+              tableColumns={customColumns}
+              DataSource={DataSource}
+            />
+          );
+        },
+      },
     ],
     availableFor: ['manager', 'agent'],
   },
