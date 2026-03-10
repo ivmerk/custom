@@ -574,6 +574,7 @@ export const dynamicIntegrationApps = integrationModules.map((mod) => ({
   order: mod.order,
   showInOverviewApp: false,
   showInAgentMenu: false,
+  hidden: mod.hidden,
   redirectTo: () => `/overview?tab=dynamic&tabView=dashboard&ruleGroup=${mod.ruleGroup}`,
 }));
 export const cdbLists = {

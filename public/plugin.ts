@@ -1,5 +1,6 @@
 import {
   AppMountParameters,
+  AppNavLinkStatus,
   CoreSetup,
   CoreStart,
   Plugin,
@@ -132,11 +133,12 @@ export class WazuhPlugin
 
     // Register the applications
     Applications.forEach(app => {
-      const { category, id, title, redirectTo, order } = app;
+      const { category, id, title, redirectTo, order, hidden } = app;
       core.application.register({
         id,
         title,
         order,
+        ...(hidden && { navLinkStatus: AppNavLinkStatus.hidden }),
         mount: async (params: AppMountParameters) => {
           try {
             /* Workaround: Redefine the validation functions of cron.statistics.interval setting.

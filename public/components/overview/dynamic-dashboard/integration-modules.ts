@@ -14,6 +14,8 @@ export interface IntegrationModule {
   euiIconType: string;
   /** Sidebar ordering (within the integrations category) */
   order: number;
+  /** Hide from the navigation sidebar (app still accessible via URL) */
+  hidden?: boolean;
 }
 
 export const integrationModules: IntegrationModule[] = [
@@ -25,17 +27,46 @@ export const integrationModules: IntegrationModule[] = [
     order: 51,
   },
   {
-    id: 'suricata',
-    title: 'Suricata',
-    ruleGroup: 'suricata',
+    id: 'cisco-ios',
+    title: 'Cisco Routers / Cisco Switches',
+    ruleGroup: 'cisco_ios',
     euiIconType: 'securityAnalyticsApp',
     order: 52,
+    hidden: true,
+  },
+  {
+    id: 'cisco-ftd',
+    title: 'Cisco Firepower / Cisco ASA',
+    ruleGroup: 'cisco_ftd',
+    euiIconType: 'securityAnalyticsApp',
+    order: 53,
+  },
+  {
+    id: 'cisco-asa',
+    title: 'Cisco Firepower / Cisco ASA',
+    ruleGroup: 'cisco_asa',
+    euiIconType: 'securityAnalyticsApp',
+    order: 54,
+  },
+  {
+    id: 'junos',
+    title: 'Juniper Security Gateways',
+    ruleGroup: 'junos',
+    euiIconType: 'securityAnalyticsApp',
+    order: 55,
   },
   {
     id: 'paloalto',
-    title: 'Palo Alto',
+    title: 'Palo Alto Networks NGFW',
     ruleGroup: 'paloalto',
     euiIconType: 'securityAnalyticsApp',
-    order: 53,
+    order: 56,
+  },
+  {
+    id: 'fortigate',
+    title: 'FortiGate NGFW',
+    ruleGroup: 'fortigate',
+    euiIconType: 'securityAnalyticsApp',
+    order: 57,
   },
 ];
