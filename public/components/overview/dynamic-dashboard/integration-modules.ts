@@ -36,7 +36,7 @@ export const integrationModules: IntegrationModule[] = [
   },
   {
     id: 'cisco-ftd',
-    title: 'Cisco Firepower / Cisco ASA',
+    title: 'Cisco Firepower',
     ruleGroup: 'cisco_ftd',
     euiIconType: 'securityAnalyticsApp',
     order: 53,
@@ -44,7 +44,7 @@ export const integrationModules: IntegrationModule[] = [
   },
   {
     id: 'cisco-asa',
-    title: 'Cisco Firepower / Cisco ASA',
+    title: 'Cisco ASA',
     ruleGroup: 'cisco_asa',
     euiIconType: 'securityAnalyticsApp',
     order: 54,
