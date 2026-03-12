@@ -5,6 +5,7 @@ import { ViewMode } from '../../../../../../src/plugins/embeddable/public';
 import { SearchResponse } from '../../../../../../src/core/server';
 import { withErrorBoundary } from '../../common/hocs/error-boundary/with-error-boundary';
 import { DiscoverNoResults } from '../../common/no-results/no-results';
+import { LoadingSearchbarProgress } from '../../common/loading-searchbar-progress/loading-searchbar-progress';
 import { IndexPattern } from '../../../../../../src/plugins/data/common';
 import {
   AlertsDataSourceRepository,
@@ -21,6 +22,7 @@ import {
 import { WzSearchBar } from '../../common/search-bar';
 import useSearchBar from '../../common/search-bar/use-search-bar';
 import { SampleDataWarning } from '../../visualize/components';
+import { useReportingCommunicateSearchContext } from '../../common/hooks/use-reporting-communicate-search-context';
 import { getDynamicDashboardPanels } from './dashboard-panels';
 import '../custom/dashboard/custom_dashboard_filters.scss';
 
@@ -57,6 +59,15 @@ const DynamicDashboardComponent: React.FC<DynamicDashboardProps> = ({ ruleGroup 
   });
   const { query, dateRangeFrom, dateRangeTo } = searchBarProps;
 
+  useReportingCommunicateSearchContext({
+    isSearching: isDataSourceLoading,
+    totalResults: results?.hits?.total ?? 0,
+    indexPattern: dataSource?.indexPattern,
+    filters: fetchFilters,
+    query: query,
+    time: { from: dateRangeFrom, to: dateRangeTo },
+  });
+
   useEffect(() => {
     if (isDataSourceLoading) {
       return;
@@ -85,50 +96,60 @@ const DynamicDashboardComponent: React.FC<DynamicDashboardProps> = ({ ruleGroup 
   ]);
 
   return (
-    <I18nProvider>
-      <>
-        <WzSearchBar
-          appName={`dynamic-${ruleGroup}-searchbar`}
-          {...searchBarProps}
-          fixedFilters={fixedFilters}
-          showQueryInput={true}
-          showQueryBar={true}
-          showSaveQuery={true}
-        />
-        {isDataSourceLoading || (dataSource && results?.hits?.total === 0) ? (
-          <DiscoverNoResults />
-        ) : null}
-        <div className="custom-dashboard-responsive">
-          <SampleDataWarning />
-          <div className="custom-dashboard-filters-wrapper">
-            <DashboardByRenderer
-              input={{
-                viewMode: ViewMode.VIEW,
-                panels: getDynamicDashboardPanels(
-                  AlertsRepository.getStoreIndexPatternId(),
-                  ruleGroup,
-                  Boolean(dataSource?.getPinnedAgentFilter().length),
-                ),
-                isFullScreenMode: false,
-                filters: fetchFilters ?? [],
-                useMargins: true,
-                id: `dynamic-dashboard-${ruleGroup}`,
-                timeRange: { from: dateRangeFrom, to: dateRangeTo },
-                title: `${ruleGroup} dashboard`,
-                description: `Dashboard for ${ruleGroup} alerts`,
-                query: query,
-                refreshConfig: {
-                  pause: false,
-                  value: 15,
-                },
-                hidePanelTitles: false,
-                lastReloadRequestTime: fingerprint,
-              }}
+    <>
+      <I18nProvider>
+        {isDataSourceLoading && !dataSource ? (
+          <LoadingSearchbarProgress />
+        ) : (
+          <>
+            <WzSearchBar
+              appName={`dynamic-${ruleGroup}-searchbar`}
+              {...searchBarProps}
+              fixedFilters={fixedFilters}
+              showDatePicker={true}
+              showQueryInput={true}
+              showQueryBar={true}
             />
-          </div>
-        </div>
-      </>
-    </I18nProvider>
+            {dataSource && results?.hits?.total === 0 ? (
+              <DiscoverNoResults />
+            ) : null}
+            <div
+              className={
+                dataSource && results?.hits?.total > 0 ? '' : 'wz-no-display'
+              }
+            >
+              <SampleDataWarning />
+              <div className="custom-dashboard-responsive">
+                <DashboardByRenderer
+                  input={{
+                    viewMode: ViewMode.VIEW,
+                    panels: getDynamicDashboardPanels(
+                      AlertsRepository.getStoreIndexPatternId(),
+                      ruleGroup,
+                      Boolean(dataSource?.getPinnedAgentFilter()?.length),
+                    ),
+                    isFullScreenMode: false,
+                    filters: fetchFilters ?? [],
+                    useMargins: true,
+                    id: `dynamic-dashboard-${ruleGroup}`,
+                    timeRange: { from: dateRangeFrom, to: dateRangeTo },
+                    title: `${ruleGroup} dashboard`,
+                    description: `Dashboard for ${ruleGroup} alerts`,
+                    query: query,
+                    refreshConfig: {
+                      pause: false,
+                      value: 15,
+                    },
+                    hidePanelTitles: false,
+                    lastReloadRequestTime: fingerprint,
+                  }}
+                />
+              </div>
+            </div>
+          </>
+        )}
+      </I18nProvider>
+    </>
   );
 };
 
