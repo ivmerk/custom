@@ -68,7 +68,7 @@ export const integrationModules: IntegrationModule[] = [
   },
   {
     id: 'fortigate',
-    title: 'FortiGate NGFW',
+    title: 'FortiGate FW',
     ruleGroup: 'fortigate',
     euiIconType: 'securityAnalyticsApp',
     order: 57,
