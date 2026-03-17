@@ -231,7 +231,7 @@ export const parseColumns = (
   // merge the properties of the field with the default columns
   if (!fields?.length) return defaultColumns;
 
-  return fields
+  const mappedColumns = fields
     .filter(field => field.name !== '_source')
     .map(field =>
       mapToDataGridColumn(
@@ -244,6 +244,15 @@ export const parseColumns = (
         defaultColumns,
       ),
     );
+
+  // Include default columns that are not present in the index pattern fields
+  // so that columns like data.user, data.action, data.dstip still render
+  const mappedColumnIds = new Set(mappedColumns.map(col => col.id));
+  const missingDefaults = defaultColumns.filter(
+    col => !mappedColumnIds.has(col.id),
+  );
+
+  return [...mappedColumns, ...missingDefaults];
 };
 
 /**
