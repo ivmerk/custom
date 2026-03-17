@@ -3,8 +3,8 @@ import {commonColumns} from '../../common/data-grid-columns';
 
 export const customColumns: tDataGridColumn[] = [
   commonColumns.timestamp,
-  commonColumns['agent.name'],
-  commonColumns['rule.level'],
+  commonColumns['data.dstip'],
+  commonColumns['data.action'],
   commonColumns['rule.id'],
-  commonColumns['rule.description'],
+  commonColumns['data.user'],
 ];

@@ -23,7 +23,7 @@ import { WzSearchBar } from '../../common/search-bar';
 import useSearchBar from '../../common/search-bar/use-search-bar';
 import { SampleDataWarning } from '../../visualize/components';
 import { useReportingCommunicateSearchContext } from '../../common/hooks/use-reporting-communicate-search-context';
-import { getDynamicDashboardPanels } from './dashboard-panels';
+import { getDynamicDashboardPanels } from './dashboard/dynamic';
 import '../custom/dashboard/custom_dashboard_filters.scss';
 
 const plugins = getPlugins();

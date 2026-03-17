@@ -248,9 +248,9 @@ export const useDataGrid = (props: tDataGridProps): EuiDataGridProps => {
   return {
     'aria-labelledby': props.ariaLabelledBy,
     columnsAvailable: orderFirstMatchedColumns(getColumns, visibleColumns), // This is a custom property used by the Available fields and is not part of EuiDataGrid component specification
-    columns: visibleColumns.map(columnId =>
-      getColumns.find(({ id }) => id === columnId),
-    ),
+    columns: visibleColumns
+      .map(columnId => getColumns.find(({ id }) => id === columnId))
+      .filter(Boolean),
     columnVisibility: {
       visibleColumns,
       setVisibleColumns,

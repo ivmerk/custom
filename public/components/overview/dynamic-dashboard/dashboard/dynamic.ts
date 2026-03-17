@@ -1,10 +1,10 @@
-import { DashboardPanelState } from '../../../../../../../src/plugins/dashboard/public/application';
-import { EmbeddableInput } from '../../../../../../../src/plugins/embeddable/public';
+import { DashboardPanelState } from '../../../../../../../../src/plugins/dashboard/public/application';
+import { EmbeddableInput } from '../../../../../../../../src/plugins/embeddable/public';
 
 const getVisStateTopRuleDescriptions = (indexPatternId: string, ruleGroup: string) => {
   return {
     id: `dynamic-top-rule-descriptions-${ruleGroup}`,
-    title: 'Top 5 rule descriptions',
+    title: 'Top 5 users',
     type: 'pie',
     params: {
       type: 'pie',
@@ -50,7 +50,7 @@ const getVisStateTopRuleDescriptions = (indexPatternId: string, ruleGroup: strin
           type: 'terms',
           schema: 'segment',
           params: {
-            field: 'rule.description',
+            field: 'data.user',
             size: 5,
             order: 'desc',
             orderBy: '1',
@@ -68,7 +68,7 @@ const getVisStateTopRuleDescriptions = (indexPatternId: string, ruleGroup: strin
 const getVisStateTopRuleLevels = (indexPatternId: string, ruleGroup: string) => {
   return {
     id: `dynamic-top-rule-levels-${ruleGroup}`,
-    title: 'Top 5 rule levels',
+    title: 'Top 5 actions',
     type: 'pie',
     params: {
       type: 'pie',
@@ -114,7 +114,7 @@ const getVisStateTopRuleLevels = (indexPatternId: string, ruleGroup: string) => 
           type: 'terms',
           schema: 'segment',
           params: {
-            field: 'rule.level',
+            field: 'data.action',
             size: 5,
             order: 'desc',
             orderBy: '1',
@@ -241,7 +241,7 @@ const getVisStateAlertsEvolutionOverTime = (indexPatternId: string, ruleGroup: s
           enabled: true,
           type: 'terms',
           params: {
-            field: 'agent.name',
+            field: 'data.dstip',
             orderBy: '1',
             order: 'desc',
             size: 5,
@@ -339,7 +339,7 @@ const getVisStateEventsTable = (indexPatternId: string, ruleGroup: string) => {
           enabled: true,
           type: 'terms',
           params: {
-            field: 'agent.name',
+            field: 'data.dstip',
             orderBy: '1',
             order: 'desc',
             size: 5,
@@ -347,7 +347,7 @@ const getVisStateEventsTable = (indexPatternId: string, ruleGroup: string) => {
             otherBucketLabel: 'Other',
             missingBucket: false,
             missingBucketLabel: 'Missing',
-            customLabel: 'agent.name',
+            customLabel: 'data.dstip',
           },
           schema: 'bucket',
         },
@@ -356,7 +356,7 @@ const getVisStateEventsTable = (indexPatternId: string, ruleGroup: string) => {
           enabled: true,
           type: 'terms',
           params: {
-            field: 'rule.description',
+            field: 'data.user',
             orderBy: '1',
             order: 'desc',
             size: 5,
@@ -364,7 +364,7 @@ const getVisStateEventsTable = (indexPatternId: string, ruleGroup: string) => {
             otherBucketLabel: 'Other',
             missingBucket: false,
             missingBucketLabel: 'Missing',
-            customLabel: 'rule.description',
+            customLabel: 'data.user',
           },
           schema: 'bucket',
         },
@@ -373,7 +373,7 @@ const getVisStateEventsTable = (indexPatternId: string, ruleGroup: string) => {
           enabled: true,
           type: 'terms',
           params: {
-            field: 'rule.level',
+            field: 'data.action',
             orderBy: '1',
             order: 'desc',
             size: 5,
@@ -381,7 +381,7 @@ const getVisStateEventsTable = (indexPatternId: string, ruleGroup: string) => {
             otherBucketLabel: 'Other',
             missingBucket: false,
             missingBucketLabel: 'Missing',
-            customLabel: 'rule.level',
+            customLabel: 'data.action',
           },
           schema: 'bucket',
         },
@@ -427,7 +427,7 @@ const getVisStateEventsTable = (indexPatternId: string, ruleGroup: string) => {
 const getVisStateAgentTopRuleDescriptions = (indexPatternId: string, ruleGroup: string) => {
   return {
     id: `dynamic-agent-top-rule-descriptions-${ruleGroup}`,
-    title: 'Top 5 rule descriptions',
+    title: 'Top 5 users',
     type: 'pie',
     params: {
       type: 'pie',
@@ -473,7 +473,7 @@ const getVisStateAgentTopRuleDescriptions = (indexPatternId: string, ruleGroup: 
           type: 'terms',
           schema: 'segment',
           params: {
-            field: 'rule.description',
+            field: 'data.user',
             size: 5,
             order: 'desc',
             orderBy: '1',
@@ -491,7 +491,7 @@ const getVisStateAgentTopRuleDescriptions = (indexPatternId: string, ruleGroup: 
 const getVisStateAgentTopRuleLevels = (indexPatternId: string, ruleGroup: string) => {
   return {
     id: `dynamic-agent-top-rule-levels-${ruleGroup}`,
-    title: 'Top 5 rule levels',
+    title: 'Top 5 actions',
     type: 'pie',
     params: {
       type: 'pie',
@@ -537,7 +537,7 @@ const getVisStateAgentTopRuleLevels = (indexPatternId: string, ruleGroup: string
           type: 'terms',
           schema: 'segment',
           params: {
-            field: 'rule.level',
+            field: 'data.action',
             size: 5,
             order: 'desc',
             orderBy: '1',
@@ -638,7 +638,7 @@ const getVisStateAgentAlertsOverTime = (indexPatternId: string, ruleGroup: strin
           type: 'terms',
           schema: 'group',
           params: {
-            field: 'rule.description',
+            field: 'data.user',
             size: 10,
             order: 'desc',
             orderBy: '1',
@@ -646,7 +646,7 @@ const getVisStateAgentAlertsOverTime = (indexPatternId: string, ruleGroup: strin
             otherBucketLabel: 'Other',
             missingBucket: false,
             missingBucketLabel: 'Missing',
-            customLabel: 'Rule',
+            customLabel: 'User',
           },
         },
         {

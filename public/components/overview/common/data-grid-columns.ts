@@ -26,4 +26,13 @@ export const commonColumns = {
     id: 'rule.id',
     initialWidth: commonInitialWidth['rule.id'],
   },
+  'data.user': {
+    id: 'data.user',
+  },
+  'data.action': {
+    id: 'data.action',
+  },
+  'data.dstip': {
+    id: 'data.dstip',
+  },
 } as const;
