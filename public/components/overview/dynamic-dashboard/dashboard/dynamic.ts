@@ -3,7 +3,7 @@ import { EmbeddableInput } from '../../../../../../../../src/plugins/embeddable/
 
 const getVisStateTopRuleDescriptions = (indexPatternId: string, ruleGroup: string) => {
   return {
-    id: `dynamic-top-rule-descriptions-${ruleGroup}`,
+    id: `dynamic-top-users-${ruleGroup}`,
     title: 'Top 5 users',
     type: 'pie',
     params: {
@@ -67,7 +67,7 @@ const getVisStateTopRuleDescriptions = (indexPatternId: string, ruleGroup: strin
 
 const getVisStateTopRuleLevels = (indexPatternId: string, ruleGroup: string) => {
   return {
-    id: `dynamic-top-rule-levels-${ruleGroup}`,
+    id: `dynamic-top-actions-${ruleGroup}`,
     title: 'Top 5 actions',
     type: 'pie',
     params: {

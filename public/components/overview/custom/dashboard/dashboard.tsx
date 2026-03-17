@@ -100,6 +100,7 @@ const DashboardC: React.FC = () => {
                 viewMode: ViewMode.VIEW,
                 panels: getDashboardPanels(
                   AlertsRepository.getStoreIndexPatternId(),
+                  'scopd',
                   Boolean(dataSource?.getPinnedAgentFilter().length),
                 ),
                 isFullScreenMode: false,
