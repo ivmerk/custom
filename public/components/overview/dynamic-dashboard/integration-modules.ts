@@ -16,6 +16,8 @@ export interface IntegrationModule {
   order: number;
   /** Hide from the navigation sidebar (app still accessible via URL) */
   hidden?: boolean;
+  /** Use the custom tab instead of the dynamic tab */
+  useCustomTab?: boolean;
 }
 
 export const integrationModules: IntegrationModule[] = [
@@ -25,6 +27,7 @@ export const integrationModules: IntegrationModule[] = [
     ruleGroup: 'scopd',
     euiIconType: 'indexRollupApp',
     order: 51,
+    useCustomTab: true,
   },
   {
     id: 'cisco-ios',

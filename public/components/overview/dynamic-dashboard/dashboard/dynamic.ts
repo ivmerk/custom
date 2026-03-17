@@ -50,7 +50,7 @@ const getVisStateTopRuleDescriptions = (indexPatternId: string, ruleGroup: strin
           type: 'terms',
           schema: 'segment',
           params: {
-            field: 'data.user',
+            field: 'data.user.keyword',
             size: 5,
             order: 'desc',
             orderBy: '1',
@@ -114,7 +114,7 @@ const getVisStateTopRuleLevels = (indexPatternId: string, ruleGroup: string) => 
           type: 'terms',
           schema: 'segment',
           params: {
-            field: 'data.action',
+            field: 'data.action.keyword',
             size: 5,
             order: 'desc',
             orderBy: '1',
@@ -241,7 +241,7 @@ const getVisStateAlertsEvolutionOverTime = (indexPatternId: string, ruleGroup: s
           enabled: true,
           type: 'terms',
           params: {
-            field: 'data.dstip',
+            field: 'data.dstip.keyword',
             orderBy: '1',
             order: 'desc',
             size: 5,
@@ -339,7 +339,7 @@ const getVisStateEventsTable = (indexPatternId: string, ruleGroup: string) => {
           enabled: true,
           type: 'terms',
           params: {
-            field: 'data.dstip',
+            field: 'data.dstip.keyword',
             orderBy: '1',
             order: 'desc',
             size: 5,
@@ -356,7 +356,7 @@ const getVisStateEventsTable = (indexPatternId: string, ruleGroup: string) => {
           enabled: true,
           type: 'terms',
           params: {
-            field: 'data.user',
+            field: 'data.user.keyword',
             orderBy: '1',
             order: 'desc',
             size: 5,
@@ -373,7 +373,7 @@ const getVisStateEventsTable = (indexPatternId: string, ruleGroup: string) => {
           enabled: true,
           type: 'terms',
           params: {
-            field: 'data.action',
+            field: 'data.action.keyword',
             orderBy: '1',
             order: 'desc',
             size: 5,
@@ -473,7 +473,7 @@ const getVisStateAgentTopRuleDescriptions = (indexPatternId: string, ruleGroup: 
           type: 'terms',
           schema: 'segment',
           params: {
-            field: 'data.user',
+            field: 'data.user.keyword',
             size: 5,
             order: 'desc',
             orderBy: '1',
@@ -537,7 +537,7 @@ const getVisStateAgentTopRuleLevels = (indexPatternId: string, ruleGroup: string
           type: 'terms',
           schema: 'segment',
           params: {
-            field: 'data.action',
+            field: 'data.action.keyword',
             size: 5,
             order: 'desc',
             orderBy: '1',
@@ -638,7 +638,7 @@ const getVisStateAgentAlertsOverTime = (indexPatternId: string, ruleGroup: strin
           type: 'terms',
           schema: 'group',
           params: {
-            field: 'data.user',
+            field: 'data.user.keyword',
             size: 10,
             order: 'desc',
             orderBy: '1',

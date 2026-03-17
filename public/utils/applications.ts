@@ -575,7 +575,9 @@ export const dynamicIntegrationApps = integrationModules.map((mod) => ({
   showInOverviewApp: false,
   showInAgentMenu: false,
   hidden: mod.hidden,
-  redirectTo: () => `/overview?tab=dynamic&tabView=dashboard&ruleGroup=${mod.ruleGroup}`,
+  redirectTo: () => mod.useCustomTab
+    ? `/overview?tab=custom&tabView=dashboard`
+    : `/overview?tab=dynamic&tabView=dashboard&ruleGroup=${mod.ruleGroup}`,
 }));
 export const cdbLists = {
   category: 'wz-category-server-management',

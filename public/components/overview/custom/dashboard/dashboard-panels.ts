@@ -129,8 +129,8 @@ const getVisStateAlertsEvolution = (indexPatternId: string) => {
           type: 'terms',
           schema: 'group',
           params: {
-            field: 'data.action',
-            customLabel: 'Action',
+            field: 'rule.groups',
+            customLabel: 'Scopd rule ID',
             orderBy: '1',
             order: 'desc',
             size: 5,
@@ -154,7 +154,7 @@ const getVisStateAlertsEvolution = (indexPatternId: string) => {
             min_doc_count: 1,
             extended_bounds: {
               min: 'now-7d',
-              max: 'now'
+              max: 'now',
             },
           },
         },
@@ -164,11 +164,9 @@ const getVisStateAlertsEvolution = (indexPatternId: string) => {
 };
 export const getDashboardPanels = (
   indexPatternId: string,
-  pinnedAgent?: boolean,
+  pinnedAgent?: boolean
 ): {
-  [panelId: string]: DashboardPanelState<
-    EmbeddableInput & { [k: string]: unknown }
-  >;
+  [panelId: string]: DashboardPanelState<EmbeddableInput & { [k: string]: unknown }>;
 } => {
   const pinnedAgentPanels = {
     '1': {
