@@ -390,7 +390,7 @@ const getVisStateEventsTable = (indexPatternId: string, ruleGroup: string) => {
           enabled: true,
           type: 'terms',
           params: {
-            field: 'rule.id',
+            field: 'rule.id.keyword',
             orderBy: '1',
             order: 'desc',
             size: 5,
@@ -407,7 +407,7 @@ const getVisStateEventsTable = (indexPatternId: string, ruleGroup: string) => {
           enabled: true,
           type: 'terms',
           params: {
-            field: 'rule.groups',
+            field: 'rule.groups.keyword',
             orderBy: '1',
             order: 'desc',
             size: 5,
