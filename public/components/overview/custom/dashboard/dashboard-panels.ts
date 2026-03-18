@@ -168,7 +168,7 @@ const getVisStateAlertsEvolutionOverTime = (indexPatternId: string, ruleGroup: s
     ...buildSearchSourceAndRefs(indexPatternId),
     aggs: [
       countAgg(),
-      termsAgg('3', 'agent.name.keyword', 'group', 5),
+      termsAgg('3', 'agent.name', 'group', 5),
       dateHistogramAgg('2', 'segment', { from: 'now-7d', to: 'now' }),
     ],
   },
