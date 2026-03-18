@@ -50,7 +50,7 @@ const getVisStateTopRuleDescriptions = (indexPatternId: string, ruleGroup: strin
           type: 'terms',
           schema: 'segment',
           params: {
-            field: 'data.user.keyword',
+            field: 'data.user',
             size: 5,
             order: 'desc',
             orderBy: '1',
@@ -114,7 +114,7 @@ const getVisStateTopRuleLevels = (indexPatternId: string, ruleGroup: string) => 
           type: 'terms',
           schema: 'segment',
           params: {
-            field: 'data.action.keyword',
+            field: 'data.action',
             size: 5,
             order: 'desc',
             orderBy: '1',
@@ -241,7 +241,7 @@ const getVisStateAlertsEvolutionOverTime = (indexPatternId: string, ruleGroup: s
           enabled: true,
           type: 'terms',
           params: {
-            field: 'data.dstip.keyword',
+            field: 'data.dstip',
             orderBy: '1',
             order: 'desc',
             size: 5,
@@ -339,7 +339,7 @@ const getVisStateEventsTable = (indexPatternId: string, ruleGroup: string) => {
           enabled: true,
           type: 'terms',
           params: {
-            field: 'data.dstip.keyword',
+            field: 'data.dstip',
             orderBy: '1',
             order: 'desc',
             size: 5,
@@ -356,7 +356,7 @@ const getVisStateEventsTable = (indexPatternId: string, ruleGroup: string) => {
           enabled: true,
           type: 'terms',
           params: {
-            field: 'data.user.keyword',
+            field: 'data.user',
             orderBy: '1',
             order: 'desc',
             size: 5,
@@ -373,7 +373,7 @@ const getVisStateEventsTable = (indexPatternId: string, ruleGroup: string) => {
           enabled: true,
           type: 'terms',
           params: {
-            field: 'data.action.keyword',
+            field: 'data.action',
             orderBy: '1',
             order: 'desc',
             size: 5,
@@ -390,7 +390,7 @@ const getVisStateEventsTable = (indexPatternId: string, ruleGroup: string) => {
           enabled: true,
           type: 'terms',
           params: {
-            field: 'rule.id.keyword',
+            field: 'rule.id',
             orderBy: '1',
             order: 'desc',
             size: 5,
@@ -407,7 +407,7 @@ const getVisStateEventsTable = (indexPatternId: string, ruleGroup: string) => {
           enabled: true,
           type: 'terms',
           params: {
-            field: 'rule.groups.keyword',
+            field: 'rule.groups',
             orderBy: '1',
             order: 'desc',
             size: 5,
@@ -473,7 +473,7 @@ const getVisStateAgentTopRuleDescriptions = (indexPatternId: string, ruleGroup: 
           type: 'terms',
           schema: 'segment',
           params: {
-            field: 'data.user.keyword',
+            field: 'data.user',
             size: 5,
             order: 'desc',
             orderBy: '1',
@@ -537,7 +537,7 @@ const getVisStateAgentTopRuleLevels = (indexPatternId: string, ruleGroup: string
           type: 'terms',
           schema: 'segment',
           params: {
-            field: 'data.action.keyword',
+            field: 'data.action',
             size: 5,
             order: 'desc',
             orderBy: '1',
@@ -638,7 +638,7 @@ const getVisStateAgentAlertsOverTime = (indexPatternId: string, ruleGroup: strin
           type: 'terms',
           schema: 'group',
           params: {
-            field: 'data.user.keyword',
+            field: 'data.user',
             size: 10,
             order: 'desc',
             orderBy: '1',
@@ -672,11 +672,9 @@ const getVisStateAgentAlertsOverTime = (indexPatternId: string, ruleGroup: strin
 export const getDynamicDashboardPanels = (
   indexPatternId: string,
   ruleGroup: string,
-  pinnedAgent?: boolean,
+  pinnedAgent?: boolean
 ): {
-  [panelId: string]: DashboardPanelState<
-    EmbeddableInput & { [k: string]: unknown }
-  >;
+  [panelId: string]: DashboardPanelState<EmbeddableInput & { [k: string]: unknown }>;
 } => {
   const overviewPanels = {
     g1: {

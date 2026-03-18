@@ -261,11 +261,11 @@ const getVisStateEventsTable = (indexPatternId: string, ruleGroup: string) => ({
     aggs: [
       countAgg(),
       dateHistogramAgg('2', 'bucket', { from: 'now-1M', to: 'now' }, { customLabel: 'timestamp' }),
-      termsAgg('3', 'agent.name.keyword', 'bucket', 5, 'agent.name'),
-      termsAgg('4', 'rule.description.keyword', 'bucket', 5, 'rule.description'),
+      termsAgg('3', 'agent.name', 'bucket', 5, 'agent.name'),
+      termsAgg('4', 'rule.description', 'bucket', 5, 'rule.description'),
       termsAgg('5', 'rule.level', 'bucket', 5, 'rule.level'),
-      termsAgg('6', 'rule.id.keyword', 'bucket', 5, 'rule.id'),
-      termsAgg('7', 'rule.groups.keyword', 'bucket', 5, 'rule.groups'),
+      termsAgg('6', 'rule.id', 'bucket', 5, 'rule.id'),
+      termsAgg('7', 'rule.groups', 'bucket', 5, 'rule.groups'),
     ],
   },
 });
@@ -310,7 +310,7 @@ export const getDashboardPanels = (
           indexPatternId,
           `dynamic-agent-top-rule-descriptions-${ruleGroup}`,
           'Top 5 rule descriptions',
-          'rule.description.keyword'
+          'rule.description'
         )
       ),
       a2: panel(
@@ -342,7 +342,7 @@ export const getDashboardPanels = (
         indexPatternId,
         `dynamic-top-rule-descriptions-${ruleGroup}`,
         'Top 5 rule descriptions',
-        'rule.description.keyword'
+        'rule.description'
       )
     ),
     g2: panel(
