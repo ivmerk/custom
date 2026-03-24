@@ -563,22 +563,49 @@ export const customPlugin = {
   redirectTo: () => '/overview?tab=custom&tabView=dashboard',
 };
 
-// Dynamic integration modules — generated from integrationModules config
-export const dynamicIntegrationApps = integrationModules.map((mod) => ({
+// Single integration dashboard app — reads ruleGroup from the URL hash at mount time.
+// Works for both built-in integrations (cisco_ftd, fortigate, …) and user-created custom groups.
+export const integrationDashboard = {
   category: 'integrations',
-  id: `integration-${mod.id}`,
-  title: mod.title,
-  breadcrumbLabel: mod.title,
-  description: `${mod.title} integration dashboard`,
-  euiIconType: mod.euiIconType,
-  order: mod.order,
+  id: 'integration-dashboard',
+  title: 'Integration Dashboard',
+  breadcrumbLabel: 'Integration Dashboard',
+  description: 'Dynamic integration dashboard filtered by ruleGroup',
+  euiIconType: 'securityAnalyticsApp',
+  order: 51,
   showInOverviewApp: false,
   showInAgentMenu: false,
-  hidden: mod.hidden,
-  redirectTo: () => mod.useCustomTab
-    ? `/overview?tab=custom&tabView=dashboard`
-    : `/overview?tab=dynamic&tabView=dashboard&ruleGroup=${mod.ruleGroup}`,
-}));
+  hidden: true,
+  redirectTo: () => {
+    const hash = window.location.hash || '';
+    const match = hash.match(/ruleGroup=([^&]*)/);
+    const ruleGroup = match ? match[1] : 'scopd';
+    return `/overview?tab=dynamic&tabView=dashboard&ruleGroup=${ruleGroup}`;
+  },
+};
+
+// Keep per-module apps only for Scopd (uses custom tab) — all other integrations use the single dashboard app above.
+const scopdModule = integrationModules.find(m => m.useCustomTab);
+export const dynamicIntegrationApps = [
+  integrationDashboard,
+  ...(scopdModule
+    ? [
+        {
+          category: 'integrations',
+          id: `integration-${scopdModule.id}`,
+          title: scopdModule.title,
+          breadcrumbLabel: scopdModule.title,
+          description: `${scopdModule.title} integration dashboard`,
+          euiIconType: scopdModule.euiIconType,
+          order: scopdModule.order,
+          showInOverviewApp: false,
+          showInAgentMenu: false,
+          hidden: scopdModule.hidden,
+          redirectTo: () => `/overview?tab=custom&tabView=dashboard`,
+        },
+      ]
+    : []),
+];
 export const cdbLists = {
   category: 'wz-category-server-management',
   id: 'cdb-lists',
